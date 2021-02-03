@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="85cf44b4-ca91-4ff2-91cd-8b03dae6641f" name="Default Changelist" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ProjectId" id="1ntmVffxycBG78Z4BV0XcjWyOsQ" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="nodejs_package_manager_path" value="npm" />
+    <property name="ts.external.directory.path" value="$APPLICATION_HOME_DIR$/plugins/JavaScriptLanguage/jsLanguageServicesImpl/external" />
+    <property name="vue.rearranger.settings.migration" value="true" />
+  </component>
+  <component name="RunManager">
+    <configuration name="dev" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
+      <package-json value="$PROJECT_DIR$/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="dev" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="npm.dev" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="85cf44b4-ca91-4ff2-91cd-8b03dae6641f" name="Default Changelist" comment="" />
+      <created>1612217785858</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1612217785858</updated>
+      <workItem from="1612217787612" duration="25680000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state width="1771" height="269" key="GridCell.Tab.0.bottom" timestamp="1612344417030">
+      <screen x="0" y="23" width="1792" height="1017" />
+    </state>
+    <state width="1771" height="269" key="GridCell.Tab.0.bottom/-71.-1057.1920.1057/0.23.1792.1017@0.23.1792.1017" timestamp="1612344417030" />
+    <state width="1771" height="269" key="GridCell.Tab.0.bottom/0.23.1792.1017@0.23.1792.1017" timestamp="1612255792409" />
+    <state width="1771" height="269" key="GridCell.Tab.0.center" timestamp="1612344417029">
+      <screen x="0" y="23" width="1792" height="1017" />
+    </state>
+    <state width="1771" height="269" key="GridCell.Tab.0.center/-71.-1057.1920.1057/0.23.1792.1017@0.23.1792.1017" timestamp="1612344417029" />
+    <state width="1771" height="269" key="GridCell.Tab.0.center/0.23.1792.1017@0.23.1792.1017" timestamp="1612255792408" />
+    <state width="1771" height="269" key="GridCell.Tab.0.left" timestamp="1612344417027">
+      <screen x="0" y="23" width="1792" height="1017" />
+    </state>
+    <state width="1771" height="269" key="GridCell.Tab.0.left/-71.-1057.1920.1057/0.23.1792.1017@0.23.1792.1017" timestamp="1612344417027" />
+    <state width="1771" height="269" key="GridCell.Tab.0.left/0.23.1792.1017@0.23.1792.1017" timestamp="1612255792407" />
+    <state width="1771" height="269" key="GridCell.Tab.0.right" timestamp="1612344417029">
+      <screen x="0" y="23" width="1792" height="1017" />
+    </state>
+    <state width="1771" height="269" key="GridCell.Tab.0.right/-71.-1057.1920.1057/0.23.1792.1017@0.23.1792.1017" timestamp="1612344417029" />
+    <state width="1771" height="269" key="GridCell.Tab.0.right/0.23.1792.1017@0.23.1792.1017" timestamp="1612255792408" />
+    <state x="515" y="149" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser" timestamp="1612285867587">
+      <screen x="0" y="23" width="1792" height="1017" />
+    </state>
+    <state x="515" y="149" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser/-71.-1057.1920.1057/0.23.1792.1017@0.23.1792.1017" timestamp="1612285867587" />
+    <state x="561" y="249" width="671" height="679" key="search.everywhere.popup" timestamp="1612376837776">
+      <screen x="0" y="23" width="1792" height="1020" />
+    </state>
+    <state x="530" y="-823" width="718" height="703" key="search.everywhere.popup/-71.-1057.1920.1057/0.23.1792.1017@-71.-1057.1920.1057" timestamp="1612357668176" />
+    <state x="561" y="248" width="670" height="676" key="search.everywhere.popup/-71.-1057.1920.1057/0.23.1792.1017@0.23.1792.1017" timestamp="1612285295942" />
+    <state x="561" y="249" width="671" height="679" key="search.everywhere.popup/-71.-1057.1920.1057/0.23.1792.1020@0.23.1792.1020" timestamp="1612376837776" />
+  </component>
+</project>
