@@ -2,7 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="85cf44b4-ca91-4ff2-91cd-8b03dae6641f" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.github/workflows/default.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/default.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -51,7 +53,7 @@
       <option name="presentableId" value="Default" />
       <updated>1612217785858</updated>
       <workItem from="1612217787612" duration="35631000" />
-      <workItem from="1612557732588" duration="3650000" />
+      <workItem from="1612557732588" duration="4261000" />
     </task>
     <servers />
   </component>
