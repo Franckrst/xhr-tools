@@ -93,6 +93,7 @@
 						{:else }
 							<button class="button-secondary pure-button" on:click={enableRBR}>Enable Debug</button>
 						{/if}
+
 						<input type="text" bind:value={requestFilter} placeholder="Filter : https://mon-api.com/produit/*">
 						<table class="pure-table">
 							<thead>
