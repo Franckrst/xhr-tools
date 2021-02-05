@@ -24,7 +24,7 @@ jobs:
       - uses: actions/checkout@v2
       # Runs a single command using the runners shell
       - name: build
-        run: npm i && npm run build && node bundle.js
+        run: npm i && npm run release
       - name: Release
         uses: fnkr/github-action-ghr@v1
         env:

@@ -3,8 +3,9 @@
   "version": "1.0.0",
   "scripts": {
     "build": "rollup -c",
+    "release": "npm run build && node bundle.js",
     "dev": "rollup -c -w",
-    "start": "sirv public"
+    "start": "sirv public --compiler-warnings \"css-unused-selector:ignore\""
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^17.0.0",
