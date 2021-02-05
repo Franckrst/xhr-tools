@@ -11,33 +11,62 @@
 	let currentResponse = {_body:''};
 	let currentRequest;
 	let currentsubView = 'request';
+	let xhrBlocked = false;
+	let requestFilter = '';
 	function edit(response,resolve,reject){
 		return ()=>{
 			currentResponse = {response,resolve,reject};
 		}
 	}
-	function enableRBR(){
-		mock.setup();
-		mock.use((request, response)=>{
-			return proxy(request, response).then((response)=>{
-				console.log(response);
+	function _getUrl(request){
+		return request._url.protocol +'://'+ request._url.host + request._url.path;
+	}
+	mock.setup();
+	mock.use((request, response)=>{
+		return proxy(request, response).then((response) => {
+			if(xhrBlocked) {
+				console.log('-->',requestFilter.length,requestFilter.replace("*",".*"))
+				if ( requestFilter.length &&
+					 (new RegExp(requestFilter.replace("*",".*"))).exec(_getUrl(request))
+				) {
+					console.log("==>", request._url.path);
+				}
 				request._toolsStatus = "WAIT";
 				return new Promise((resolve, reject) => {
 							console.log(JSON.stringify(request));
 							requests = [{
 								request,
-								resolve: () => {request._toolsStatus = 'SENDED';resolve(response);forceUpdate();},
+								resolve: () => {
+									request._toolsStatus = 'SENDED';
+									resolve(response);
+									forceUpdate();
+								},
 								reject,
-								edit: edit(response._body,resolve,reject),
-								show: ()=> {currentRequest = request; currentResponse = response}
-							},...requests];
+								edit: edit(response._body, resolve, reject),
+								show: () => {
+									currentRequest = request;
+									currentResponse = response
+								}
+							}, ...requests];
 						}
 				)
-			});
+			}else {
+				requests = [{
+					request,
+					show: () => {
+						currentRequest = request;
+						currentResponse = response
+					}
+				}, ...requests];
+				return response;
+			}
 		});
+	});
+	function enableRBR(){
+		xhrBlocked = true;
 	}
 	function disableRBR(){
-		mock.teardown();
+		xhrBlocked = false
 	}
 	/** ----- RBR ------ */
 </script>
@@ -59,10 +88,12 @@
 			<div class="pure-u-1-1">
 				<div class="pure-g">
 					<div class=" pure-u-1-2">
-						<button class="button-secondary pure-button" on:click={enableRBR}>Block All</button>
-						<button class="button-secondary pure-button" on:click={disableRBR}>unblock All</button>
-						<button class="button-secondary pure-button" on:click={disableRBR}>Block filtred</button>
-						<input type="text">
+						{#if xhrBlocked}
+							<button class="button-secondary pure-button" on:click={disableRBR}>Disable Debug</button>
+						{:else }
+							<button class="button-secondary pure-button" on:click={enableRBR}>Enable Debug</button>
+						{/if}
+						<input type="text" bind:value={requestFilter} placeholder="Filter : https://mon-api.com/produit/*">
 						<table class="pure-table">
 							<thead>
 							<tr>
@@ -76,7 +107,7 @@
 							{#each requests as { request,resolve,reject,edit,show }, i}
 								<tr on:click={show} class="{currentRequest === request ? 'selected': ''}">
 									<td>{requests.length - i}</td>
-									<td>{request._url.protocol +'://'+ request._url.host + request._url.path}</td>
+									<td>{_getUrl(request)}</td>
 									<td>{request._toolsStatus}</td>
 									<td>
 										<button class="button-success pure-button" on:click={resolve}>Pass</button>
