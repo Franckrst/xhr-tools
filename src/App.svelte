@@ -1,6 +1,7 @@
 <script>
 	import mock,{proxy} from 'xhr-mock';
 	let currentModule = 'rbr';
+	let open = false;
 	let _forceUpdate;
 	function forceUpdate(){
 		_forceUpdate = Date.now();
@@ -69,19 +70,35 @@
 	}
 	/** ----- RBR ------ */
 </script>
-<main>
+<main class="{open?'':'close'}" >
 	<div class="pure-g pure-u-1-1 d-flex  d-column">
 		<div class="pure-u-1-1">
 			<ul class="menu">
-				<li class="{(currentModule === 'rbr' ? 'selected' : '')+' item'} " on:click={()=>currentModule='rbr'} >Request by Request
-				</li>
-				<li class="{(currentModule === 'info' ? 'selected' : '')+' item'} " on:click={()=>currentModule='info'}>
-					More infos
-				</li>
+				{#if xhrBlocked}
+					<li class="{(currentModule === 'rbr' && open ? 'selected' : '')+' item'} " on:click={()=>currentModule='rbr'} >
+						<span class="rec"></span>
+					</li>
+				{/if}
+				{#if open}
+					<li class="{(currentModule === 'rbr' ? 'selected' : '')+' item'} " on:click={()=>currentModule='rbr'} >
+						Request by Request
+					</li>
+					<li class="{(currentModule === 'info' ? 'selected' : '')+' item'} " on:click={()=>currentModule='info'}>
+						More infos
+					</li>
+					<li class="item item-right" on:click={()=>open=false}>
+						Close
+					</li>
+				{:else}
+					<li class="item item-right" on:click={()=>open=true}>
+						Open
+					</li>
+				{/if}
 			</ul>
 		</div>
-		{#if currentModule === 'rbr'}
-			<div class="pure-u-1-1 d-flex flex-1">
+		{#if open}
+			{#if currentModule === 'rbr'}
+				<div class="pure-u-1-1 d-flex flex-1">
 					<div class="pure-u-1-2 left-panel d-flex d-column">
 						<div class="pure-u-1 sub-menu d-flex">
 							{#if xhrBlocked}
@@ -93,100 +110,112 @@
 						</div>
 						<div class="pure-u-1 flex-1">
 							<div style="height: 100%;overflow-y: scroll;">
-							<table class="pure-table">
-								<thead>
-								<tr>
-									<th style="width: 5%">#</th>
-									<th style="width: 75%">Url</th>
-									<th style="width: 10%">status</th>
-									<th style="width: 10%">action</th>
-								</tr>
-								</thead>
-								<tbody>
-								{#each requests as { request,resolve,reject,edit,show }, i}
-									<tr on:click={show} class="{currentRequest === request ? 'selected': ''}">
-										<td>{requests.length - i}</td>
-										<td>{_getUrl(request)}</td>
-										<td>{request._toolsStatus.toLowerCase()}</td>
-										<td>
-											{#if request._toolsStatus === 'WAIT'}
-												<div class="action" on:click={resolve}>PASS</div>
-											{/if}
-										</td>
+								<table class="pure-table">
+									<thead>
+									<tr>
+										<th style="width: 5%">#</th>
+										<th style="width: 75%">Url</th>
+										<th style="width: 10%">status</th>
+										<th style="width: 10%">action</th>
 									</tr>
-								{/each}
-								</tbody>
-							</table>
+									</thead>
+									<tbody>
+									{#each requests as { request,resolve,reject,edit,show }, i}
+										<tr on:click={show} class="{currentRequest === request ? 'selected': ''}">
+											<td>{requests.length - i}</td>
+											<td>{_getUrl(request)}</td>
+											<td>{request._toolsStatus.toLowerCase()}</td>
+											<td>
+												{#if request._toolsStatus === 'WAIT'}
+													<div class="action" on:click={resolve}>PASS</div>
+												{/if}
+											</td>
+										</tr>
+									{/each}
+									</tbody>
+								</table>
 							</div>
 						</div>
 					</div>
 					{#if currentRequest}
-					<div class="pure-u-1-2 d-flex d-column">
-						<div class="pure-menu pure-menu-horizontal">
-							<ul class="menu">
-								<li class="{(currentsubView === 'request' ? 'selected' : '')+' item'} "on:click={()=>currentsubView='request'}>
-									Request
-								</li>
-								<li class="{(currentsubView === 'response' ? 'selected' : '')+' item'} " on:click={()=>currentsubView='response'}>
-									Response
-								</li>
-								<li class="{(currentsubView === 'mock' ? 'selected' : '')+' item'} " on:click={()=>currentsubView='mock'}>
-									Create Mock
-								</li>
-							</ul>
-						</div>
-						{#if currentsubView === 'request'}
-						<div class="pure-u-1 flex-1 content">
-							<span>General</span>
-							<ul>
-								<li><b>url : </b> {currentRequest._url.protocol +'://'+ currentRequest._url.host + currentRequest._url.path}</li>
-								<li><b>method : </b> {currentRequest._method}</li>
-							</ul>
-							<span>Custome Headers</span>
-							<ul>
-								{#each Object.keys(currentRequest._headers) as headerKey, i}
-									<li><b>{headerKey} : </b> {currentRequest._headers[headerKey]}</li>
-								{/each}
-							</ul>
-						</div>
-						{:else if currentsubView === 'response'}
-						<div class="pure-u-1">
-							<div>
-							<span>You can edit response.</span>
-							<button class="button-success pure-button">pass response</button>
+						<div class="pure-u-1-2 d-flex d-column content" style="height: 240px; overflow-x: scroll">
+							<div class="pure-menu pure-menu-horizontal">
+								<ul class="menu">
+									<li class="{(currentsubView === 'request' ? 'selected' : '')+' item'} "on:click={()=>currentsubView='request'}>
+										Request
+									</li>
+									<li class="{(currentsubView === 'response' ? 'selected' : '')+' item'} " on:click={()=>currentsubView='response'}>
+										Response
+									</li>
+									<li class="{(currentsubView === 'mock' ? 'selected' : '')+' item'} " on:click={()=>currentsubView='mock'}>
+										Create Mock
+									</li>
+								</ul>
 							</div>
-							<span>General</span>
-							<ul>
-								<li><b>status : </b> <input type="text" bind:value={currentResponse._status} disabled={currentRequest._toolsStatus !== 'WAIT'}></li>
-								<li><b>reason : </b> <input type="text" bind:value={currentResponse._reason} disabled={currentRequest._toolsStatus !== 'WAIT'}></li>
-							</ul>
-							<span>Headers</span>
-							<ul>
-								{#each Object.keys(currentResponse._headers) as headerKey, i}
-									<li><b>{headerKey} : </b> {currentResponse._headers[headerKey]}</li>
-								{/each}
-							</ul>
-							<hr/>
-							<label for="currentResponseMessage">Body</label>
-							<textarea disabled={currentRequest._toolsStatus !== 'WAIT'} style="width: 100%; height: 200px"  id="currentResponseMessage" bind:value={currentResponse._body}></textarea>
+							{#if currentsubView === 'request'}
+								<div class="pure-u-1 flex-1">
+									<span>General</span>
+									<ul>
+										<li><b>url : </b> {currentRequest._url.protocol +'://'+ currentRequest._url.host + currentRequest._url.path}</li>
+										<li><b>method : </b> {currentRequest._method}</li>
+									</ul>
+									<span>Custome Headers</span>
+									<ul>
+										{#each Object.keys(currentRequest._headers) as headerKey, i}
+											<li><b>{headerKey} : </b> {currentRequest._headers[headerKey]}</li>
+										{/each}
+									</ul>
+								</div>
+							{:else if currentsubView === 'response'}
+								<div class="pure-u-1">
+									<div>
+										<span>You can edit response.</span>
+										<button class="button-success pure-button">pass response</button>
+									</div>
+									<span>General</span>
+									<ul>
+										<li><b>status : </b>
+											{#if currentRequest._toolsStatus === 'WAIT'}
+												<input type="text" bind:value={currentResponse._status}>
+											{:else}
+												{currentResponse._status}
+											{/if}
+										</li>
+										<li><b>reason : </b>
+											{#if currentRequest._toolsStatus === 'WAIT'}
+												<input type="text" bind:value={currentResponse._reason}>
+											{:else}
+												{currentResponse._reason}
+											{/if}
+										</li>
+									</ul>
+									<span>Headers</span>
+									<ul>
+										{#each Object.keys(currentResponse._headers) as headerKey, i}
+											<li><b>{headerKey} : </b> {currentResponse._headers[headerKey]}</li>
+										{/each}
+									</ul>
+									<label for="currentResponseMessage">Body</label>
+									<textarea disabled={currentRequest._toolsStatus !== 'WAIT'} style="width: 100%; height: 200px"  id="currentResponseMessage" bind:value={currentResponse._body}></textarea>
+								</div>
+							{/if}
+							<form class="pure-form pure-form-aligned hidden">
+								<div class="pure-control-group">
+									<label for="currentResponseCode">Code HTTP</label>
+									<input type="text" id="currentResponseCode">
+								</div>
+								<label for="currentResponseMessage">Message</label>
+								<button class="button-success pure-button" on:click={edit}>send</button>
+							</form>
 						</div>
-						{/if}
-						<form class="pure-form pure-form-aligned hidden">
-							<div class="pure-control-group">
-								<label for="currentResponseCode">Code HTTP</label>
-								<input type="text" id="currentResponseCode">
-							</div>
-							<label for="currentResponseMessage">Message</label>
-							<button class="button-success pure-button" on:click={edit}>send</button>
-						</form>
-					</div>
 					{/if}
-			</div>
-		{/if}
-		{#if currentModule === 'info'}
-			<div class="pure-u-1-1">
+				</div>
+			{/if}
+			{#if currentModule === 'info'}
+				<div class="pure-u-1-1">
 
-			</div>
+				</div>
+			{/if}
 		{/if}
 	</div>
 </main>
@@ -202,6 +231,17 @@
 		background-color: #333;
 		height: 300px;
 		width: 100%;
+		&.close{
+			height: auto;
+		}
+		.rec{
+			display: inline-block;
+			height: 0.6em;
+			margin: 0.3em 0em;
+			width: 0.6em;
+			border-radius: 0.6em;
+			background-color: #ff4d4d;
+		}
 		.left-panel{
 			border-right: 1px solid #565656;
 			margin-left: -1px;
@@ -305,6 +345,7 @@
 	input[type=text]{
 		height: 1.8em;
 		background-color: #1f1f1f;
-		border: 1px solid;
+		border: 1px solid #ffffff;
+		color: #ffffff;
 	}
 </style>
