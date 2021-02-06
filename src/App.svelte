@@ -1,7 +1,7 @@
 <script>
 	import mock,{proxy} from 'xhr-mock';
 	let currentModule = 'rbr';
-	let open = false;
+	let open = true;
 	let _forceUpdate;
 	function forceUpdate(){
 		_forceUpdate = Date.now();
@@ -10,7 +10,7 @@
 	/** ----- RBR ------ */
 	let requests = [];
 	let currentResponse = {_body:''};
-	let currentRequest;
+	let currentRequest, currentResolve;
 	let currentsubView = 'request';
 	let xhrBlocked = false;
 	let requestFilter = '';
@@ -25,29 +25,32 @@
 	mock.setup();
 	mock.use((request, response)=>{
 		return proxy(request, response).then((response) => {
-			console.log(requestFilter.length)
-			if(xhrBlocked && (!requestFilter.length ||
-					(new RegExp(requestFilter.replace("*",".*"))).exec(_getUrl(request))
-			)
+			try {
+				const jsonObj = JSON.parse(response._body);
+				response._body = JSON.stringify(jsonObj,'','	');
+			}catch (e){}
+			if( xhrBlocked &&
+				(!requestFilter.length || (new RegExp(requestFilter.replace("*",".*"))).exec(_getUrl(request)))
 			) {
 				request._toolsStatus = "WAIT";
-				return new Promise((resolve, reject) => {
-							console.log(JSON.stringify(request));
-							requests = [{
-								request,
-								resolve: () => {
-									request._toolsStatus = 'SENDED';
-									resolve(response);
-									forceUpdate();
-								},
-								reject,
-								edit: edit(response._body, resolve, reject),
-								show: () => {
-									currentRequest = request;
-									currentResponse = response
-								}
-							}, ...requests];
-						}
+				return new Promise(
+					(resolve, reject) => {
+						const resolveFnc =  () => {
+							request._toolsStatus = 'SENDED';
+							resolve(response);
+							forceUpdate();
+						};
+						requests = [{
+							request,
+							resolve:resolveFnc,
+							show: () => {
+								currentRequest = request;
+								currentResponse = response
+								currentResolve = resolveFnc;
+
+							}
+						}, ...requests];
+					}
 				)
 			}else {
 				request._toolsStatus = 'SENDED';
@@ -71,8 +74,8 @@
 	/** ----- RBR ------ */
 </script>
 <main class="{open?'':'close'}" >
-	<div class="pure-g pure-u-1-1 d-flex is-overflow-scroll">
-		<div class="pure-u-1-1 is-sticky-top menu-background">
+	<div class="pure-g pure-u-1-1 d-flex">
+		<div class="pure-u-1-1 menu-background">
 			<ul class="menu">
 				{#if xhrBlocked}
 					<li class="{(currentModule === 'rbr' && open ? 'selected' : '')+' item'} " on:click={()=>currentModule='rbr'} >
@@ -109,7 +112,7 @@
 							<input type="text" bind:value={requestFilter} placeholder="Filter : https://mon-api.com/produit/*">
 						</div>
 						<div class="pure-u-1 flex-1">
-							<div style="height: 100%;overflow-y: scroll;">
+							<div>
 								<table class="pure-table">
 									<thead>
 									<tr>
@@ -119,13 +122,17 @@
 										<th style="width: 10%">action</th>
 									</tr>
 									</thead>
+								</table>
+							</div>
+							<div style="overflow-y: scroll; height: 17em;">
+								<table class="pure-table">
 									<tbody>
 									{#each requests as { request,resolve,reject,edit,show }, i}
 										<tr on:click={show} class="{currentRequest === request ? 'selected': ''}">
-											<td>{requests.length - i}</td>
-											<td>{_getUrl(request)}</td>
-											<td>{request._toolsStatus.toLowerCase()}</td>
-											<td>
+											<td style="width: 5%">{requests.length - i}</td>
+											<td style="width: 75%">{_getUrl(request)}</td>
+											<td style="width: 10%">{request._toolsStatus.toLowerCase()}</td>
+											<td style="width: 10%">
 												{#if request._toolsStatus === 'WAIT'}
 													<div class="action" on:click={resolve}>PASS</div>
 												{/if}
@@ -152,6 +159,7 @@
 									</li>
 								</ul>
 							</div>
+							<div style="overflow-y: scroll; height: 19em;padding: 1em;">
 							{#if currentsubView === 'request'}
 								<div class="pure-u-1 flex-1 content">
 									<span>General</span>
@@ -168,10 +176,9 @@
 								</div>
 							{:else if currentsubView === 'response'}
 								<div class="pure-u-1 content">
-									<div>
-										<span>You can edit response.</span>
-										<button class="button-success pure-button">pass response</button>
-									</div>
+									{#if currentRequest._toolsStatus === 'WAIT'}
+										<p><i>You can edit response.</i></p>
+									{/if}
 									<span>General</span>
 									<ul>
 										<li><b>status : </b>
@@ -196,9 +203,11 @@
 										{/each}
 									</ul>
 									<label for="currentResponseMessage">Body</label>
+									<br>
 									<textarea disabled={currentRequest._toolsStatus !== 'WAIT'} style="width: 100%; height: 200px"  id="currentResponseMessage" bind:value={currentResponse._body}></textarea>
 								</div>
 							{/if}
+							</div>
 							<form class="pure-form pure-form-aligned hidden">
 								<div class="pure-control-group">
 									<label for="currentResponseCode">Code HTTP</label>
@@ -342,18 +351,10 @@
 	.content{
 	    background: darkslategray;
     	color: white;
-		padding: 1em;
 	}
 
 	.menu-background {
 		background: #333;
-	}
-	.is-overflow-scroll {
-		overflow: scroll;
-	}
-	.is-sticky-top {
-		position: sticky;
-		top: 0;
 	}
 	.d-flex{
 		display: flex;

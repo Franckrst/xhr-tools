@@ -17,12 +17,13 @@
 	function debugXhr(){
 		var xhttp = new XMLHttpRequest();
 		xhttp.onreadystatechange = function() {
+			console.log(xhttp.responseText,xhttp,this.readyState);
 			if (this.readyState == 4) {
 				// Typical action to be performed when the document is ready:
 				console.log(xhttp);
 			}
 		};
-		xhttp.open("GET", "https://raw.githubusercontent.com/electron/electron/master/docs/api/browser-window.md", true);
+		xhttp.open("GET", "https://raw.githubusercontent.com/Franckrst/xhr-tools/main/package.json", true);
 		xhttp.send();
 	}
 </script>
