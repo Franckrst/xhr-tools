@@ -138,7 +138,7 @@
 						</div>
 					</div>
 					{#if currentRequest}
-						<div class="pure-u-1-2 d-flex d-column content" style="height: 240px; overflow-x: scroll">
+						<div class="pure-u-1-2 d-flex d-column content request-container">
 							<div class="pure-menu pure-menu-horizontal">
 								<ul class="menu">
 									<li class="{(currentsubView === 'request' ? 'selected' : '')+' item'} "on:click={()=>currentsubView='request'}>
@@ -153,7 +153,7 @@
 								</ul>
 							</div>
 							{#if currentsubView === 'request'}
-								<div class="pure-u-1 flex-1">
+								<div class="pure-u-1 flex-1 content">
 									<span>General</span>
 									<ul>
 										<li><b>url : </b> {currentRequest._url.protocol +'://'+ currentRequest._url.host + currentRequest._url.path}</li>
@@ -270,7 +270,7 @@
 		.menu{
 			margin: 0;
 			padding: 0;
-			flex-direction: row;
+			flex-flow: row nowrap;
 			display: flex;
 			border-bottom: 1px solid #565656;
 			.item{
@@ -279,6 +279,7 @@
 				color: #d6d6d6;
 				margin: 0;
 				display: flex;
+				flex: 0 auto;
 				cursor: pointer;
 				&:hover{
 					background-color: #292929;
@@ -288,6 +289,16 @@
 					background-color: #000;
 					color: #FFF;
 				}
+				&.item-right {
+					margin: 0 0 0 auto;
+				}
+			}
+		}
+		.request-container {
+			padding: 0;
+
+			.menu .item {
+				padding: 0.53rem;
 			}
 		}
 		.pure-table{
@@ -329,8 +340,13 @@
 		border-top: 1px solid #d6d6d6;
 	}
 	.content{
+	    background: darkslategray;
+    	color: white;
 		padding: 1em;
-		color: #b7b7b7;
+
+		.pure-menu {
+			background: #333;
+		}
 	}
 
 	.d-flex{
