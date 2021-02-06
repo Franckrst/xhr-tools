@@ -24,13 +24,11 @@
 	mock.setup();
 	mock.use((request, response)=>{
 		return proxy(request, response).then((response) => {
-			if(xhrBlocked) {
-				console.log('-->',requestFilter.length,requestFilter.replace("*",".*"))
-				if ( requestFilter.length &&
-					 (new RegExp(requestFilter.replace("*",".*"))).exec(_getUrl(request))
-				) {
-					console.log("==>", request._url.path);
-				}
+			console.log(requestFilter.length)
+			if(xhrBlocked && (!requestFilter.length ||
+					(new RegExp(requestFilter.replace("*",".*"))).exec(_getUrl(request))
+			)
+			) {
 				request._toolsStatus = "WAIT";
 				return new Promise((resolve, reject) => {
 							console.log(JSON.stringify(request));
@@ -51,6 +49,7 @@
 						}
 				)
 			}else {
+				request._toolsStatus = 'SENDED';
 				requests = [{
 					request,
 					show: () => {
@@ -71,69 +70,73 @@
 	/** ----- RBR ------ */
 </script>
 <main>
-	<div class="pure-g">
+	<div class="pure-g pure-u-1-1 d-flex  d-column">
 		<div class="pure-u-1-1">
-			<div class="pure-menu pure-menu-horizontal">
-				<ul class="pure-menu-list">
-					<li class="{(currentModule === 'rbr' ? 'pure-menu-selected' : '')+' pure-menu-item'} ">
-						<span class="pure-menu-link" on:click={()=>currentModule='rbr'}>Request by Request</span>
-					</li>
-					<li class="{(currentModule === 'info' ? 'pure-menu-selected' : '')+' pure-menu-item'} ">
-						<span class="pure-menu-link" on:click={()=>currentModule='info'}>More infos</span>
-					</li>
-				</ul>
-			</div>
+			<ul class="menu">
+				<li class="{(currentModule === 'rbr' ? 'selected' : '')+' item'} " on:click={()=>currentModule='rbr'} >Request by Request
+				</li>
+				<li class="{(currentModule === 'info' ? 'selected' : '')+' item'} " on:click={()=>currentModule='info'}>
+					More infos
+				</li>
+			</ul>
 		</div>
 		{#if currentModule === 'rbr'}
-			<div class="pure-u-1-1">
-				<div class="pure-g">
-					<div class=" pure-u-1-2">
-						{#if xhrBlocked}
-							<button class="button-secondary pure-button" on:click={disableRBR}>Disable Debug</button>
-						{:else }
-							<button class="button-secondary pure-button" on:click={enableRBR}>Enable Debug</button>
-						{/if}
-						<input type="text" bind:value={requestFilter} placeholder="Filter : https://mon-api.com/produit/*">
-						<table class="pure-table">
-							<thead>
-							<tr>
-								<th style="width: 5%">#</th>
-								<th style="width: 75%">Url</th>
-								<th style="width: 10%">status</th>
-								<th style="width: 10%">action</th>
-							</tr>
-							</thead>
-							<tbody>
-							{#each requests as { request,resolve,reject,edit,show }, i}
-								<tr on:click={show} class="{currentRequest === request ? 'selected': ''}">
-									<td>{requests.length - i}</td>
-									<td>{_getUrl(request)}</td>
-									<td>{request._toolsStatus}</td>
-									<td>
-										<button class="button-success pure-button" on:click={resolve}>Pass</button>
-									</td>
+			<div class="pure-u-1-1 d-flex flex-1">
+					<div class="pure-u-1-2 left-panel d-flex d-column">
+						<div class="pure-u-1 sub-menu d-flex">
+							{#if xhrBlocked}
+								<span class="btn-record active" on:click={disableRBR}>&nbsp;</span>
+							{:else }
+								<span class="btn-record" on:click={enableRBR}>&nbsp;</span>
+							{/if}
+							<input type="text" bind:value={requestFilter} placeholder="Filter : https://mon-api.com/produit/*">
+						</div>
+						<div class="pure-u-1 flex-1">
+							<div style="height: 100%;overflow-y: scroll;">
+							<table class="pure-table">
+								<thead>
+								<tr>
+									<th style="width: 5%">#</th>
+									<th style="width: 75%">Url</th>
+									<th style="width: 10%">status</th>
+									<th style="width: 10%">action</th>
 								</tr>
-							{/each}
-							</tbody>
-						</table>
+								</thead>
+								<tbody>
+								{#each requests as { request,resolve,reject,edit,show }, i}
+									<tr on:click={show} class="{currentRequest === request ? 'selected': ''}">
+										<td>{requests.length - i}</td>
+										<td>{_getUrl(request)}</td>
+										<td>{request._toolsStatus.toLowerCase()}</td>
+										<td>
+											{#if request._toolsStatus === 'WAIT'}
+												<div class="action" on:click={resolve}>PASS</div>
+											{/if}
+										</td>
+									</tr>
+								{/each}
+								</tbody>
+							</table>
+							</div>
+						</div>
 					</div>
 					{#if currentRequest}
-					<div class="pure-u-1-2">
+					<div class="pure-u-1-2 d-flex d-column">
 						<div class="pure-menu pure-menu-horizontal">
-							<ul class="pure-menu-list">
-								<li class="{(currentsubView === 'request' ? 'pure-menu-selected' : '')+' pure-menu-item'} ">
-									<span class="pure-menu-link" on:click={()=>currentsubView='request'}>Request</span>
+							<ul class="menu">
+								<li class="{(currentsubView === 'request' ? 'selected' : '')+' item'} "on:click={()=>currentsubView='request'}>
+									Request
 								</li>
-								<li class="{(currentsubView === 'response' ? 'pure-menu-selected' : '')+' pure-menu-item'} ">
-									<span class="pure-menu-link" on:click={()=>currentsubView='response'}>Response</span>
+								<li class="{(currentsubView === 'response' ? 'selected' : '')+' item'} " on:click={()=>currentsubView='response'}>
+									Response
 								</li>
-								<li class="{(currentsubView === 'mock' ? 'pure-menu-selected' : '')+' pure-menu-item'} ">
-									<span class="pure-menu-link" on:click={()=>currentsubView='mock'}>Create Mock</span>
+								<li class="{(currentsubView === 'mock' ? 'selected' : '')+' item'} " on:click={()=>currentsubView='mock'}>
+									Create Mock
 								</li>
 							</ul>
 						</div>
 						{#if currentsubView === 'request'}
-						<div class="pure-u-1">
+						<div class="pure-u-1 flex-1 content">
 							<span>General</span>
 							<ul>
 								<li><b>url : </b> {currentRequest._url.protocol +'://'+ currentRequest._url.host + currentRequest._url.path}</li>
@@ -178,7 +181,6 @@
 						</form>
 					</div>
 					{/if}
-				</div>
 			</div>
 		{/if}
 		{#if currentModule === 'info'}
@@ -193,50 +195,116 @@
 	@import "~purecss/build/pure.css";
 
 	main {
+		display: flex;
 		position: fixed;
 		bottom: 0;
 		left: 0;
-		background-color: #efefef;
+		background-color: #333;
 		height: 300px;
 		width: 100%;
-		tr.selected{
-			background-color: #c9f4ff;
+		.left-panel{
+			border-right: 1px solid #565656;
+			margin-left: -1px;
 		}
-		font-size: 80%;
-		border: 1px solid #4db1ca;
-		.pure-menu{
-			border-bottom: 1px solid #4db1ca;
-			.pure-menu-item .pure-menu-link{
-				border-right: 1px solid #565d64;
+		.sub-menu{
+			padding: 0.3em;
+			.btn-record{
+				cursor: pointer;
+				display: flex;
+				width: 0.5em;
+				height: 0.5em;
+				margin: 0.2em 0.4em;
+				border-radius: 1em;
+				font-size: 2em;
+				background-color: #565656;
+				&.active{
+					background-color: #ff4d4d;
+				}
+			}
+			input{
+				width: 50%;
+				color: #FFF;
 			}
 		}
+
+		.menu{
+			margin: 0;
+			padding: 0;
+			flex-direction: row;
+			display: flex;
+			border-bottom: 1px solid #565656;
+			.item{
+				padding: 0.6em 1em;
+				font-size: 0.9em;
+				color: #d6d6d6;
+				margin: 0;
+				display: flex;
+				cursor: pointer;
+				&:hover{
+					background-color: #292929;
+					color: #FFF;
+				}
+				&.selected{
+					background-color: #000;
+					color: #FFF;
+				}
+			}
+		}
+		.pure-table{
+			width: 100%;
+			border-color: #565656 !important;
+			border-right: none;
+			border-left: none;
+			*{
+				border-color: #565656 !important;
+			}
+			thead,tbody{
+				background-color: inherit;
+			}
+			tr{
+				border-top:1px solid #565656 !important;
+			}
+			td, th {
+				padding: 0.35em !important;
+				font-style: normal !important;
+				font-weight: normal;
+				color: #d6d6d6;
+			}
+			tr:nth-child(even) {background: #373434
+			}
+			tr:nth-child(odd) {background: #2f2f2f
+			}
+			tr.selected{
+				background-color: #606c76;
+			}
+			.action{
+				font-size: 0.8em;
+				background-color: #616161;
+				padding: 0.3em;
+				text-align: center;
+				cursor: pointer;
+			}
+		}
+		font-size: 80%;
+		border-top: 1px solid #d6d6d6;
 	}
-	.button-success,
-	.button-error,
-	.button-warning,
-	.button-secondary {
-		color: white;
-		border-radius: 4px;
-		text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+	.content{
+		padding: 1em;
+		color: #b7b7b7;
 	}
 
-	.button-success {
-		background: rgb(28, 184, 65);
-		/* this is a green */
+	.d-flex{
+		display: flex;
 	}
-
-	.button-error {
-		background: rgb(202, 60, 60);
-		/* this is a maroon */
+	.flex-1{
+		flex: 1;
 	}
-
-	.button-warning {
-		background: rgb(223, 117, 20);
-		/* this is an orange */
+	.d-column{
+		flex-direction: column;
 	}
-
-	.button-secondary {
-		background: rgb(66, 184, 221);
-		/* this is a light blue */
+	input[type=text]{
+		height: 1.8em;
+		background-color: #1f1f1f;
+		border: 1px solid;
 	}
 </style>
