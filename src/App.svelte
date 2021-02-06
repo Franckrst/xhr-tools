@@ -71,8 +71,8 @@
 	/** ----- RBR ------ */
 </script>
 <main class="{open?'':'close'}" >
-	<div class="pure-g pure-u-1-1 d-flex  d-column">
-		<div class="pure-u-1-1">
+	<div class="pure-g pure-u-1-1 d-flex is-overflow-scroll">
+		<div class="pure-u-1-1 is-sticky-top menu-background">
 			<ul class="menu">
 				{#if xhrBlocked}
 					<li class="{(currentModule === 'rbr' && open ? 'selected' : '')+' item'} " on:click={()=>currentModule='rbr'} >
@@ -139,7 +139,7 @@
 					</div>
 					{#if currentRequest}
 						<div class="pure-u-1-2 d-flex d-column content request-container">
-							<div class="pure-menu pure-menu-horizontal">
+							<div class="menu-background pure-menu-horizontal">
 								<ul class="menu">
 									<li class="{(currentsubView === 'request' ? 'selected' : '')+' item'} "on:click={()=>currentsubView='request'}>
 										Request
@@ -159,7 +159,7 @@
 										<li><b>url : </b> {currentRequest._url.protocol +'://'+ currentRequest._url.host + currentRequest._url.path}</li>
 										<li><b>method : </b> {currentRequest._method}</li>
 									</ul>
-									<span>Custome Headers</span>
+									<span>Custom Headers</span>
 									<ul>
 										{#each Object.keys(currentRequest._headers) as headerKey, i}
 											<li><b>{headerKey} : </b> {currentRequest._headers[headerKey]}</li>
@@ -167,7 +167,7 @@
 									</ul>
 								</div>
 							{:else if currentsubView === 'response'}
-								<div class="pure-u-1">
+								<div class="pure-u-1 content">
 									<div>
 										<span>You can edit response.</span>
 										<button class="button-success pure-button">pass response</button>
@@ -343,12 +343,18 @@
 	    background: darkslategray;
     	color: white;
 		padding: 1em;
-
-		.pure-menu {
-			background: #333;
-		}
 	}
 
+	.menu-background {
+		background: #333;
+	}
+	.is-overflow-scroll {
+		overflow: scroll;
+	}
+	.is-sticky-top {
+		position: sticky;
+		top: 0;
+	}
 	.d-flex{
 		display: flex;
 	}
