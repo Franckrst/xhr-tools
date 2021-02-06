@@ -25,6 +25,7 @@
     "milligram": "^1.4.1",
     "normalize.css": "^8.0.1",
     "purecss": "^2.0.5",
+    "reset-css": "^5.0.1",
     "sirv-cli": "^1.0.0",
     "xhr-mock": "^2.5.1"
   }
