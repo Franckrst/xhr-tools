@@ -84,17 +84,13 @@
 	let currentsubView = 'request';
 	let xhrBlocked = false;
 	let requestFilter = '';
-	function edit(response,resolve,reject){
-		return ()=>{
-			currentResponse = {response,resolve,reject};
-		}
-	}
 	function _getUrl(request){
 		return request._url.protocol +'://'+ request._url.host + request._url.path;
 	}
 	mock.setup();
 	mock.use((request, response)=>{
 		return proxy(request, response).then((response) => {
+			response = Object.assign({},response);
 			try {
 				const jsonObj = JSON.parse(response._body);
 				response._body = JSON.stringify(jsonObj,'','	');
@@ -348,14 +344,6 @@
 								</div>
 							{/if}
 							</div>
-							<form class="pure-form pure-form-aligned hidden">
-								<div class="pure-control-group">
-									<label for="currentResponseCode">Code HTTP</label>
-									<input type="text" id="currentResponseCode">
-								</div>
-								<label for="currentResponseMessage">Message</label>
-								<button class="button-success pure-button" on:click={edit}>send</button>
-							</form>
 						</div>
 					{/if}
 				</div>
