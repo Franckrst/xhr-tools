@@ -20,12 +20,27 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="85cf44b4-ca91-4ff2-91cd-8b03dae6641f" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bundle.js" beforeDir="false" afterPath="$PROJECT_DIR$/bundle.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/public/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rollup.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/rollup.config.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/App.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="HTML File" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -36,6 +51,7 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="DefaultHtmlFileTemplate" value="HTML File" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
@@ -92,40 +108,46 @@
       <screen x="0" y="23" width="1792" height="1017" />
     </state>
     <state x="100" y="123" width="1592" height="817" key="DiffContextDialog/0.23.1792.1017@0.23.1792.1017" timestamp="1612649951383" />
-    <state width="1771" height="269" key="GridCell.Tab.0.bottom" timestamp="1612537441335">
+    <state width="1771" height="269" key="GridCell.Tab.0.bottom" timestamp="1612707645206">
       <screen x="0" y="23" width="1792" height="1017" />
     </state>
     <state width="1771" height="269" key="GridCell.Tab.0.bottom/-71.-1057.1920.1057/0.23.1792.1017@0.23.1792.1017" timestamp="1612537441335" />
-    <state width="1771" height="269" key="GridCell.Tab.0.bottom/0.23.1792.1017@0.23.1792.1017" timestamp="1612255792409" />
-    <state width="1771" height="269" key="GridCell.Tab.0.center" timestamp="1612537441330">
+    <state width="1771" height="269" key="GridCell.Tab.0.bottom/0.23.1792.1017@0.23.1792.1017" timestamp="1612707645205" />
+    <state width="1771" height="269" key="GridCell.Tab.0.center" timestamp="1612707645204">
       <screen x="0" y="23" width="1792" height="1017" />
     </state>
     <state width="1771" height="269" key="GridCell.Tab.0.center/-71.-1057.1920.1057/0.23.1792.1017@0.23.1792.1017" timestamp="1612537441330" />
-    <state width="1771" height="269" key="GridCell.Tab.0.center/0.23.1792.1017@0.23.1792.1017" timestamp="1612255792408" />
-    <state width="1771" height="269" key="GridCell.Tab.0.left" timestamp="1612537441315">
+    <state width="1771" height="269" key="GridCell.Tab.0.center/0.23.1792.1017@0.23.1792.1017" timestamp="1612707645204" />
+    <state width="1771" height="269" key="GridCell.Tab.0.left" timestamp="1612707645202">
       <screen x="0" y="23" width="1792" height="1017" />
     </state>
     <state width="1771" height="269" key="GridCell.Tab.0.left/-71.-1057.1920.1057/0.23.1792.1017@0.23.1792.1017" timestamp="1612537441315" />
-    <state width="1771" height="269" key="GridCell.Tab.0.left/0.23.1792.1017@0.23.1792.1017" timestamp="1612255792407" />
-    <state width="1771" height="269" key="GridCell.Tab.0.right" timestamp="1612537441331">
+    <state width="1771" height="269" key="GridCell.Tab.0.left/0.23.1792.1017@0.23.1792.1017" timestamp="1612707645202" />
+    <state width="1771" height="269" key="GridCell.Tab.0.right" timestamp="1612707645204">
       <screen x="0" y="23" width="1792" height="1017" />
     </state>
     <state width="1771" height="269" key="GridCell.Tab.0.right/-71.-1057.1920.1057/0.23.1792.1017@0.23.1792.1017" timestamp="1612537441331" />
-    <state width="1771" height="269" key="GridCell.Tab.0.right/0.23.1792.1017@0.23.1792.1017" timestamp="1612255792408" />
+    <state width="1771" height="269" key="GridCell.Tab.0.right/0.23.1792.1017@0.23.1792.1017" timestamp="1612707645204" />
     <state x="716" y="236" key="VCS.ChangeListViewerDialog" timestamp="1612649947214">
       <screen x="0" y="23" width="1792" height="1017" />
     </state>
     <state x="716" y="236" key="VCS.ChangeListViewerDialog/0.23.1792.1017@0.23.1792.1017" timestamp="1612649947214" />
-    <state x="515" y="149" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser" timestamp="1612285867587">
-      <screen x="0" y="23" width="1792" height="1017" />
+    <state x="100" y="123" width="1592" height="817" key="com.intellij.history.integration.ui.views.FileHistoryDialog" timestamp="1612720419022">
+      <screen x="0" y="23" width="1792" height="1020" />
+    </state>
+    <state x="100" y="123" width="1592" height="817" key="com.intellij.history.integration.ui.views.FileHistoryDialog/0.23.1792.1020@0.23.1792.1020" timestamp="1612720419022" />
+    <state x="515" y="149" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser" timestamp="1612717917782">
+      <screen x="0" y="23" width="1792" height="1020" />
     </state>
     <state x="515" y="149" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser/-71.-1057.1920.1057/0.23.1792.1017@0.23.1792.1017" timestamp="1612285867587" />
-    <state x="561" y="248" width="671" height="678" key="search.everywhere.popup" timestamp="1612655673840">
-      <screen x="0" y="23" width="1792" height="1017" />
+    <state x="515" y="149" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser/0.23.1792.1020@0.23.1792.1020" timestamp="1612717917782" />
+    <state x="561" y="249" width="671" height="680" key="search.everywhere.popup" timestamp="1612730246861">
+      <screen x="0" y="23" width="1792" height="1020" />
     </state>
     <state x="530" y="-823" width="718" height="703" key="search.everywhere.popup/-71.-1057.1920.1057/0.23.1792.1017@-71.-1057.1920.1057" timestamp="1612357668176" />
     <state x="561" y="248" width="670" height="676" key="search.everywhere.popup/-71.-1057.1920.1057/0.23.1792.1017@0.23.1792.1017" timestamp="1612285295942" />
     <state x="561" y="249" width="671" height="679" key="search.everywhere.popup/-71.-1057.1920.1057/0.23.1792.1020@0.23.1792.1020" timestamp="1612376837776" />
-    <state x="561" y="248" width="671" height="678" key="search.everywhere.popup/0.23.1792.1017@0.23.1792.1017" timestamp="1612655673840" />
+    <state x="561" y="248" width="671" height="678" key="search.everywhere.popup/0.23.1792.1017@0.23.1792.1017" timestamp="1612707931201" />
+    <state x="561" y="249" width="671" height="680" key="search.everywhere.popup/0.23.1792.1020@0.23.1792.1020" timestamp="1612730246861" />
   </component>
 </project>

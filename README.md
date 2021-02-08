@@ -1,7 +1,6 @@
 #DebugMockXhr
 
-[Add me in Favori](javascript:var s=document.createElement("script");s.type="text/javascript",s.src="https://github.com/Franckrst/xhr-tools/releases/download/0.1.1/script.js",document.head.append(s);)
-
+Create new favorit link in your browser and set in name "DebugXgr" set in link code below
 ````javascript
-var s=document.createElement("script");s.type="text/javascript",s.src="https://github.com/Franckrst/xhr-tools/releases/download/0.1.1/script.js",document.head.append(s);
+javascript:var s=document.createElement("script");s.type="text/javascript",s.src="https://github.com/Franckrst/xhr-tools/releases/download/0.1.1/script.js",document.head.append(s);
 ````

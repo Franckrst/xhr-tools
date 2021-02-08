@@ -1,11 +1,81 @@
 <script>
+	import * as AWS from '@aws-sdk/client-s3';
+	import buffer from 'buffer';
 	import mock,{proxy} from 'xhr-mock';
-	let currentModule = 'rbr';
+	window.Buffer = window.Buffer || buffer.Buffer;
+	var settingSubMenu = 'awsS3';
+	let currentModule = 'mock';
 	let open = true;
 	let _forceUpdate;
 	function forceUpdate(){
 		_forceUpdate = Date.now();
 		requests = [...requests];
+	}
+	var clientS3;
+	function loadS3Client(){
+		clientS3 = new AWS.S3({
+			bucketName: awsInfo.bucketName,
+			region: awsInfo.region,
+			credentials: { accessKeyId: awsInfo.accessKeyId, secretAccessKey: awsInfo.secretAccessKey }
+		});
+	}
+	/** ----- INIT ------ */
+	var awsInfo = JSON.parse(localStorage.getItem('awsInfo') || '{}');
+	if(awsInfo?.accessKeyId){
+		loadS3Client();
+	}
+	/** ----- MOCK ------ */
+	var inputMockCreate = {url:'',name:''};
+	var inputMockCreateStatus;
+	function loadMockFromAWSS3(){
+		clientS3.listObjects({ Bucket: awsInfo.bucketName, Prefix: '' },  function(err, data)  {
+			inputAwsInfoStatus = !err;
+			var photos = data.Contents.map(function(photo) {
+				console.log(photo);
+				return photo.Key;
+			});
+			console.log(photos);
+			clientS3.getObject({ Bucket: awsInfo.bucketName, Key: photos[1] }, function (err,data){
+
+				const reader = data.Body.getReader();
+				reader.read().then(({ done, value }) => {
+					console.log(done, value);
+				})
+
+			})
+		});
+	}
+	function createMock(){
+		inputMockCreateStatus = null;
+		clientS3.uploadPart({Key: inputMockCreate.name+'.json', Body: JSON.stringify({
+				body: currentResponse._body,
+				status: currentResponse._status,
+				reason: currentResponse._reason
+			}),Bucket:awsInfo.bucketName},function(err, data) {
+			inputMockCreateStatus = !err;
+		});
+	}
+	/** ----- Setting ------ */
+	var inputAwsInfo = {bucketName: '',region: '',accessKeyId:'',secretAccessKey: '',...awsInfo};
+	var inputAwsInfoStatus = null;
+	function saveAwsInfo(){
+		inputAwsInfoStatus = null;
+		try {
+			var s3 = new AWS.S3({
+				bucketName: inputAwsInfo.bucketName,
+				region: inputAwsInfo.region,
+				credentials: { accessKeyId: inputAwsInfo.accessKeyId, secretAccessKey: inputAwsInfo.secretAccessKey }
+			});
+			s3.listObjects({ Bucket: inputAwsInfo.bucketName, Prefix: '' },  (err, data) => {
+				inputAwsInfoStatus = !err;
+				if (inputAwsInfoStatus) {
+					localStorage.setItem('awsInfo', JSON.stringify(inputAwsInfo));
+					clientS3 = inputAwsInfo;
+					inputMockCreateStatus = null;
+					loadS3Client();
+				}
+			});
+		}catch (e) { inputAwsInfoStatus = false; }
 	}
 	/** ----- RBR ------ */
 	let requests = [];
@@ -59,6 +129,7 @@
 					show: () => {
 						currentRequest = request;
 						currentResponse = response
+						inputMockCreate.url = _getUrl(request);
 					}
 				}, ...requests];
 				return response;
@@ -86,8 +157,14 @@
 					<li class="{(currentModule === 'rbr' ? 'selected' : '')+' item'} " on:click={()=>currentModule='rbr'} >
 						Request by Request
 					</li>
+					<li class="{(currentModule === 'mock' ? 'selected' : '')+' item'} " on:click={()=>currentModule='mock'}>
+						Mock
+					</li>
 					<li class="{(currentModule === 'info' ? 'selected' : '')+' item'} " on:click={()=>currentModule='info'}>
 						More infos
+					</li>
+					<li class="{(currentModule === 'setting' ? 'selected' : '')+' item'} " on:click={()=>currentModule='setting'}>
+						Setting
 					</li>
 					<li class="item item-right" on:click={()=>open=false}>
 						Close
@@ -100,7 +177,45 @@
 			</ul>
 		</div>
 		{#if open}
-			{#if currentModule === 'rbr'}
+			{#if currentModule === 'setting'}
+				<div class="pure-u-1-1 d-flex flex-1 d-column setting">
+					<div class="menu-background">
+						<ul class="menu">
+							<li class="{(settingSubMenu === 'awsS3' ? 'selected' : '')+' item'} "on:click={()=>settingSubMenu='awsS3'}>
+								AWS S3
+							</li>
+						</ul>
+					</div>
+					<form class="pure-u-1-2 form" on:submit|preventDefault="{saveAwsInfo}">
+						<div class="item">
+							<label for="bucketName">bucketName</label>
+							<input type="text" id="bucketName" bind:value={inputAwsInfo.bucketName}/>
+						</div>
+						<div class="item">
+							<label for="region">region</label>
+							<input type="text" id="region" bind:value={inputAwsInfo.region}/>
+						</div>
+						<div class="item">
+							<label for="accessKeyId">accessKeyId</label>
+							<input type="text" id="accessKeyId" bind:value={inputAwsInfo.accessKeyId}/>
+						</div>
+						<div class="item">
+							<label for="secretAccessKey">secretAccessKey</label>
+							<input type="password" id="secretAccessKey" bind:value={inputAwsInfo.secretAccessKey}/>
+						</div>
+						<div class="item-submit">
+							<button>save</button>
+						</div>
+						<div class="item-info {inputAwsInfoStatus ? 'succes':'error'}">
+							{#if inputAwsInfoStatus === false}
+								Invalid informations
+							{:else if inputAwsInfoStatus}
+								Informations saved
+							{/if}
+						</div>
+					</form>
+				</div>
+			{:else if currentModule === 'rbr'}
 				<div class="pure-u-1-1 d-flex flex-1">
 					<div class="pure-u-1-2 left-panel d-flex d-column">
 						<div class="pure-u-1 sub-menu d-flex">
@@ -146,7 +261,7 @@
 					</div>
 					{#if currentRequest}
 						<div class="pure-u-1-2 d-flex d-column content request-container">
-							<div class="menu-background pure-menu-horizontal">
+							<div class="menu-background">
 								<ul class="menu">
 									<li class="{(currentsubView === 'request' ? 'selected' : '')+' item'} "on:click={()=>currentsubView='request'}>
 										Request
@@ -206,6 +321,31 @@
 									<br>
 									<textarea disabled={currentRequest._toolsStatus !== 'WAIT'} style="width: 100%; height: 200px"  id="currentResponseMessage" bind:value={currentResponse._body}></textarea>
 								</div>
+							{:else if currentsubView === 'mock'}
+								<div class="pure-u-1 content">
+
+									<form class="pure-u-1 form" on:submit|preventDefault="{createMock}">
+										<div class="item">
+											<label for="name">name</label>
+											<input type="text" id="name" bind:value={inputMockCreate.name}/>
+										</div>
+										<div class="item">
+											<label for="url">url</label>
+											<input type="text" id="url" bind:value={inputMockCreate.url}/>
+										</div>
+										<div class="item-info"><i>Exemple : https://mon-api.com/produit/*</i></div>
+										<div class="item-submit">
+											<button>Create and save</button>
+										</div>
+										<div class="item-info {inputMockCreateStatus ? 'succes':'error'}">
+											{#if inputMockCreateStatus === false}
+												Fail to create MOCK
+											{:else if inputMockCreateStatus}
+												Mock create
+											{/if}
+										</div>
+									</form>
+								</div>
 							{/if}
 							</div>
 							<form class="pure-form pure-form-aligned hidden">
@@ -219,8 +359,11 @@
 						</div>
 					{/if}
 				</div>
-			{/if}
-			{#if currentModule === 'info'}
+			{:else if currentModule === 'mock'}
+				<div class="pure-u-1-1">
+					<button on:click={loadMockFromAWSS3}>Load mock from AWS</button>
+				</div>
+			{:else if currentModule === 'info'}
 				<div class="pure-u-1-1">
 
 				</div>
@@ -243,12 +386,53 @@
 		left: 0;
 		z-index: 999;
 		background-color: #333;
-		height: 300px;
+		height: 24em;
 		width: 100%;
 		&.close{
 			height: auto;
 		}
-
+		.form{
+			padding: 1em;
+			.item-info{
+				&.error{
+					color: red;
+				}
+				&.succes{
+					color: green;
+				}
+				width: 67%;
+				padding: 1em 0 1em  23%;
+			}
+			.item-submit{
+				padding-top: 0.5em;
+				button{
+					border: 1px solid #606c76;
+					background-color: #616161;
+					width: 67%;
+					padding: 0.2em 0;
+					color: #ffffff;
+					margin-left: 23%;
+					text-align: center;
+					cursor: pointer;
+				}
+			}
+			.item{
+				width: 100%;
+				padding: 0.2em 0;
+				label{
+					text-align: right;
+					color: #ffffff;
+					display: inline-block;
+					width: 20%;
+					padding-right: 3%;
+				}
+				input{
+					width: 65%;
+				}
+			}
+		}
+		.setting{
+		}
 		.content{
 			background: darkslategray;
 			color: #eeeeee !important;
@@ -265,7 +449,7 @@
 		.d-column{
 			flex-direction: column;
 		}
-		input[type=text]{
+		input[type=text],input[type=password]{
 			height: 1.8em;
 			padding: 0em 0.4em;
 			background-color: #1f1f1f;

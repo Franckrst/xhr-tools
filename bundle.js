@@ -1,5 +1,6 @@
 var fs = require('fs');
 
+const fix = `window.exports = window.exports||{"__esModule": true};\n`;
 const js = fs.readFileSync('./public/build/bundle.js', 'utf8');
 const css = fs.readFileSync('./public/build/bundle.css', 'utf8');
 
@@ -8,5 +9,5 @@ const el = document.createElement("style");
 el.innerText = "${css.replace(/"/g,'\\"')}";
 document.head.appendChild(el);`
 
-fs.writeFileSync('script.js', js + cssInjector);
+fs.writeFileSync('script.js', fix + js + cssInjector);
 
