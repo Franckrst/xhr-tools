@@ -90,28 +90,33 @@
 	mock.setup();
 	mock.use((request, response)=>{
 		return proxy(request, response).then((response) => {
-			response = Object.assign({},response);
+			const responseCopy = Object.assign({},request);
+			const requestCopy = Object.assign({},request)
+			//response = Object.assign({},response);
 			try {
 				const jsonObj = JSON.parse(response._body);
-				response._body = JSON.stringify(jsonObj,'','	');
+				responseCopy._body = JSON.stringify(jsonObj,'','	');
 			}catch (e){}
 			if( xhrBlocked &&
 				(!requestFilter.length || (new RegExp(requestFilter.replace("*",".*"))).exec(_getUrl(request)))
 			) {
-				request._toolsStatus = "WAIT";
+				requestCopy._toolsStatus = "WAIT";
 				return new Promise(
 					(resolve, reject) => {
 						const resolveFnc =  () => {
-							request._toolsStatus = 'SENDED';
+							requestCopy._toolsStatus = 'SENDED';
+							response._body = responseCopy._body;
+							response._reason = responseCopy._reason;
+							response._status = responseCopy._status;
 							resolve(response);
 							forceUpdate();
 						};
 						requests = [{
-							request,
+							request:requestCopy,
 							resolve:resolveFnc,
 							show: () => {
-								currentRequest = request;
-								currentResponse = response
+								currentRequest = requestCopy;
+								currentResponse = responseCopy
 								currentResolve = resolveFnc;
 
 							}
@@ -119,12 +124,12 @@
 					}
 				)
 			}else {
-				request._toolsStatus = 'SENDED';
+				requestCopy._toolsStatus = 'SENDED';
 				requests = [{
-					request,
+					request:requestCopy,
 					show: () => {
-						currentRequest = request;
-						currentResponse = response
+						currentRequest = requestCopy;
+						currentResponse = responseCopy
 						inputMockCreate.url = _getUrl(request);
 					}
 				}, ...requests];
