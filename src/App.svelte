@@ -12,6 +12,9 @@
 		requests = [...requests];
 	}
 	var clientS3;
+	/*
+
+	*/
 	function loadS3Client(){
 		clientS3 = new AWS.S3({
 			bucketName: awsInfo.bucketName,
@@ -27,28 +30,39 @@
 	/** ----- MOCK ------ */
 	var inputMockCreate = {url:'',name:''};
 	var inputMockCreateStatus;
-	function loadMockFromAWSS3(){
-		clientS3.listObjects({ Bucket: awsInfo.bucketName, Prefix: '' },  function(err, data)  {
-			inputAwsInfoStatus = !err;
-			var photos = data.Contents.map(function(photo) {
-				console.log(photo);
-				return photo.Key;
-			});
-			console.log(photos);
-			clientS3.getObject({ Bucket: awsInfo.bucketName, Key: photos[1] }, function (err,data){
-
+	var mocks = [];
+	function loadMock(key){
+		return new Promise(((resolve, reject) => {
+			clientS3.getObject({ Bucket: awsInfo.bucketName, Key: key }, function (err,data){
 				const reader = data.Body.getReader();
+				const decoder = new TextDecoder('utf-8')
 				reader.read().then(({ done, value }) => {
 					console.log(done, value);
+					resolve( JSON.parse(decoder.decode(value)));
 				})
+			});
+		}));
+	}
 
-			})
+	function loadMockFromAWSS3(){
+		clientS3.listObjects({ Bucket: awsInfo.bucketName, Prefix: '' },  function(err, data)  {
+			console.log(data.Contents);
+			const mockLoading = [];
+			for( const mock of data.Contents){
+				mockLoading.push(loadMock(mock.Key));
+			}
+			Promise.all(mockLoading).then((data)=>{
+				mocks = data;
+				console.log(data);
+			});
 		});
 	}
 	function createMock(){
 		inputMockCreateStatus = null;
 		clientS3.uploadPart({Key: inputMockCreate.name+'.json', Body: JSON.stringify({
 				body: currentResponse._body,
+				name:inputMockCreate.name,
+				url: inputMockCreate.url,
 				status: currentResponse._status,
 				reason: currentResponse._reason
 			}),Bucket:awsInfo.bucketName},function(err, data) {
@@ -355,6 +369,32 @@
 			{:else if currentModule === 'mock'}
 				<div class="pure-u-1-1">
 					<button on:click={loadMockFromAWSS3}>Load mock from AWS</button>
+					<div>
+						<table class="pure-table">
+							<thead>
+							<tr>
+								<th style="width: 5%">name</th>
+								<th style="width: 75%">url</th>
+								<th style="width: 10%">status</th>
+								<th style="width: 10%">action</th>
+							</tr>
+							</thead>
+						</table>
+					</div>
+					<div style="overflow-y: scroll; height: 17em;">
+						<table class="pure-table">
+							<tbody>
+							{#each mocks as mock, i}
+								<tr>
+									<td style="width: 5%">{mock.name}</td>
+									<td style="width: 75%">{mock.url}</td>
+									<td style="width: 10%">-</td>
+									<td style="width: 10%">-</td>
+								</tr>
+							{/each}
+							</tbody>
+						</table>
+					</div>
 				</div>
 			{:else if currentModule === 'info'}
 				<div class="pure-u-1-1">
