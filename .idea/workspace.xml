@@ -24,8 +24,6 @@
   <component name="ChangeListManager">
     <list default="true" id="85cf44b4-ca91-4ff2-91cd-8b03dae6641f" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/script.js" beforeDir="false" afterPath="$PROJECT_DIR$/script.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/App.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.svelte" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -51,6 +49,7 @@
   <component name="PropertiesComponent">
     <property name="DefaultHtmlFileTemplate" value="HTML File" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_package_manager_path" value="npm" />
@@ -84,7 +83,9 @@
       <updated>1612217785858</updated>
       <workItem from="1612217787612" duration="35631000" />
       <workItem from="1612557732588" duration="13069000" />
-      <workItem from="1612815794917" duration="1334000" />
+      <workItem from="1612815794917" duration="1641000" />
+      <workItem from="1612993978682" duration="3052000" />
+      <workItem from="1613143184288" duration="1134000" />
     </task>
     <servers />
   </component>
@@ -136,10 +137,10 @@
       <screen x="0" y="23" width="1792" height="1017" />
     </state>
     <state x="716" y="236" key="VCS.ChangeListViewerDialog/0.23.1792.1017@0.23.1792.1017" timestamp="1612649947214" />
-    <state x="100" y="123" width="1592" height="817" key="com.intellij.history.integration.ui.views.FileHistoryDialog" timestamp="1612720419022">
+    <state x="100" y="123" width="1592" height="817" key="com.intellij.history.integration.ui.views.FileHistoryDialog" timestamp="1612994622512">
       <screen x="0" y="23" width="1792" height="1020" />
     </state>
-    <state x="100" y="123" width="1592" height="817" key="com.intellij.history.integration.ui.views.FileHistoryDialog/0.23.1792.1020@0.23.1792.1020" timestamp="1612720419022" />
+    <state x="100" y="123" width="1592" height="817" key="com.intellij.history.integration.ui.views.FileHistoryDialog/0.23.1792.1020@0.23.1792.1020" timestamp="1612994622512" />
     <state x="515" y="149" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser" timestamp="1612717917782">
       <screen x="0" y="23" width="1792" height="1020" />
     </state>
