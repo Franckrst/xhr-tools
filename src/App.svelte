@@ -49,6 +49,7 @@
 		inputMockCreateStatus = null;
 		clientS3.uploadPart({Key: inputMockCreate.name+'.json', Body: JSON.stringify({
 				body: currentResponse._body,
+				method: currentRequest._method,
 				status: currentResponse._status,
 				reason: currentResponse._reason
 			}),Bucket:awsInfo.bucketName},function(err, data) {
